@@ -1,28 +1,24 @@
 package br.unicamp.padroescriacionais.legacy.service;
 
-import br.unicamp.padroescriacionais.legacy.domain.ConfiguracaoSistema;
-import br.unicamp.padroescriacionais.legacy.domain.FormatoRelatorio;
-import br.unicamp.padroescriacionais.legacy.domain.Relatorio;
-import br.unicamp.padroescriacionais.legacy.domain.TipoRelatorio;
-import br.unicamp.padroescriacionais.legacy.creator.RelatorioCreator;
-import br.unicamp.padroescriacionais.legacy.creator.PdfRelatorioCreator;
-import br.unicamp.padroescriacionais.legacy.creator.CsvRelatorioCreator;
-import br.unicamp.padroescriacionais.legacy.creator.JsonRelatorioCreator;
-import br.unicamp.padroescriacionais.legacy.creator.XmlRelatorioCreator;  
-import br.unicamp.padroescriacionais.legacy.creator.HtmlRelatorioCreator;
-import br.unicamp.padroescriacionais.legacy.generator.RelatorioGenerator;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.unicamp.padroescriacionais.legacy.creator.CsvRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.HtmlRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.JsonRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.PdfRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.RelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.XmlRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.domain.ConfiguracaoSistema;
+import br.unicamp.padroescriacionais.legacy.domain.FormatoRelatorio;
+import br.unicamp.padroescriacionais.legacy.domain.Relatorio;
+import br.unicamp.padroescriacionais.legacy.domain.TipoRelatorio;
+import br.unicamp.padroescriacionais.legacy.generator.RelatorioGenerator;
+
 public class RelatorioService {
-private final Map<FormatoRelatorio, RelatorioCreator> creators = new HashMap<>();
-private ConfiguracaoSistema configuracao = new ConfiguracaoSistema(
-            "Empresa XPTO",
-            "DEV",
-            "/tmp/relatorios",
-            false
-    );
+    private final Map<FormatoRelatorio, RelatorioCreator> creators = new HashMap<>();
+    private ConfiguracaoSistema configuracao = ConfiguracaoSistema.getInstancia();
     
     public RelatorioService() {
         creators.put(FormatoRelatorio.PDF, new PdfRelatorioCreator());

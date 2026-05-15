@@ -6,6 +6,14 @@ public class ConfiguracaoSistema {
     private String ambiente;
     private String diretorioExportacao;
     private boolean debugAtivo;
+    private static ConfiguracaoSistema instancia = new ConfiguracaoSistema();
+
+    private ConfiguracaoSistema() {
+        this.nomeEmpresa = "Empresa XPTO Ltda.";
+        this.ambiente = "DEV";
+        this.diretorioExportacao = "/tmp/relatorios";
+        this.debugAtivo = false;
+    }
 
     public ConfiguracaoSistema(String nomeEmpresa, String ambiente,
                                String diretorioExportacao, boolean debugAtivo) {
@@ -13,6 +21,10 @@ public class ConfiguracaoSistema {
         this.ambiente = ambiente;
         this.diretorioExportacao = diretorioExportacao;
         this.debugAtivo = debugAtivo;
+    }
+
+    public static ConfiguracaoSistema getInstancia() {
+        return instancia;
     }
 
     public String getNomeEmpresa() {

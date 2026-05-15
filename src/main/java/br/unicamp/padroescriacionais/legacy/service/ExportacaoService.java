@@ -1,29 +1,23 @@
 package br.unicamp.padroescriacionais.legacy.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import br.unicamp.padroescriacionais.legacy.creator.CsvRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.HtmlRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.JsonRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.PdfRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.RelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.XmlRelatorioCreator;
 import br.unicamp.padroescriacionais.legacy.domain.ConfiguracaoSistema;
 import br.unicamp.padroescriacionais.legacy.domain.FormatoRelatorio;
 import br.unicamp.padroescriacionais.legacy.domain.Relatorio;
-import br.unicamp.padroescriacionais.legacy.creator.RelatorioCreator;
-import br.unicamp.padroescriacionais.legacy.creator.PdfRelatorioCreator;
-import br.unicamp.padroescriacionais.legacy.creator.CsvRelatorioCreator;
-import br.unicamp.padroescriacionais.legacy.creator.JsonRelatorioCreator;
-import br.unicamp.padroescriacionais.legacy.creator.XmlRelatorioCreator; 
-import br.unicamp.padroescriacionais.legacy.creator.HtmlRelatorioCreator;
 import br.unicamp.padroescriacionais.legacy.generator.RelatorioGenerator;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ExportacaoService {
 
     private final Map<FormatoRelatorio, RelatorioCreator> creators = new HashMap<>();
-
-    private ConfiguracaoSistema configuracao = new ConfiguracaoSistema(
-            "Empresa XPTO Ltda.",
-            "PROD",
-            "/var/exports/relatorios",
-            false
-    );
+    private ConfiguracaoSistema configuracao = ConfiguracaoSistema.getInstancia();
     public ExportacaoService() {
         creators.put(FormatoRelatorio.PDF, new PdfRelatorioCreator());
         creators.put(FormatoRelatorio.CSV, new CsvRelatorioCreator());
