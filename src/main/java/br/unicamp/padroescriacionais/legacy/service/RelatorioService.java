@@ -8,6 +8,8 @@ import br.unicamp.padroescriacionais.legacy.creator.RelatorioCreator;
 import br.unicamp.padroescriacionais.legacy.creator.PdfRelatorioCreator;
 import br.unicamp.padroescriacionais.legacy.creator.CsvRelatorioCreator;
 import br.unicamp.padroescriacionais.legacy.creator.JsonRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.XmlRelatorioCreator;  
+import br.unicamp.padroescriacionais.legacy.creator.HtmlRelatorioCreator;
 import br.unicamp.padroescriacionais.legacy.generator.RelatorioGenerator;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -26,6 +28,8 @@ private ConfiguracaoSistema configuracao = new ConfiguracaoSistema(
         creators.put(FormatoRelatorio.PDF, new PdfRelatorioCreator());
         creators.put(FormatoRelatorio.CSV, new CsvRelatorioCreator());
         creators.put(FormatoRelatorio.JSON, new JsonRelatorioCreator());
+        creators.put(FormatoRelatorio.XML, new XmlRelatorioCreator());
+        creators.put(FormatoRelatorio.HTML, new HtmlRelatorioCreator());
     }
 
     public Relatorio criarRelatorio(TipoRelatorio tipo) {

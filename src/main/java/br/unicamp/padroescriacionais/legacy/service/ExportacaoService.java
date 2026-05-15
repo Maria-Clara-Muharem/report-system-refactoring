@@ -3,11 +3,20 @@ package br.unicamp.padroescriacionais.legacy.service;
 import br.unicamp.padroescriacionais.legacy.domain.ConfiguracaoSistema;
 import br.unicamp.padroescriacionais.legacy.domain.FormatoRelatorio;
 import br.unicamp.padroescriacionais.legacy.domain.Relatorio;
-import br.unicamp.padroescriacionais.legacy.generator.CsvRelatorioGenerator;
-import br.unicamp.padroescriacionais.legacy.generator.JsonRelatorioGenerator;
-import br.unicamp.padroescriacionais.legacy.generator.PdfRelatorioGenerator;
+import br.unicamp.padroescriacionais.legacy.creator.RelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.PdfRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.CsvRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.JsonRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.creator.XmlRelatorioCreator; 
+import br.unicamp.padroescriacionais.legacy.creator.HtmlRelatorioCreator;
+import br.unicamp.padroescriacionais.legacy.generator.RelatorioGenerator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExportacaoService {
+
+    private final Map<FormatoRelatorio, RelatorioCreator> creators = new HashMap<>();
 
     private ConfiguracaoSistema configuracao = new ConfiguracaoSistema(
             "Empresa XPTO Ltda.",
@@ -15,26 +24,22 @@ public class ExportacaoService {
             "/var/exports/relatorios",
             false
     );
+    public ExportacaoService() {
+        creators.put(FormatoRelatorio.PDF, new PdfRelatorioCreator());
+        creators.put(FormatoRelatorio.CSV, new CsvRelatorioCreator());
+        creators.put(FormatoRelatorio.JSON, new JsonRelatorioCreator());
+        creators.put(FormatoRelatorio.XML, new XmlRelatorioCreator());
+        creators.put(FormatoRelatorio.HTML, new HtmlRelatorioCreator());
+    }
 
     public void exportar(Relatorio relatorio, FormatoRelatorio formato) {
-        String conteudoFormatado;
-
-        switch (formato) {
-            case PDF:
-                PdfRelatorioGenerator pdfGenerator = new PdfRelatorioGenerator();
-                conteudoFormatado = pdfGenerator.gerar(relatorio);
-                break;
-            case CSV:
-                CsvRelatorioGenerator csvGenerator = new CsvRelatorioGenerator();
-                conteudoFormatado = csvGenerator.gerar(relatorio);
-                break;
-            case JSON:
-                JsonRelatorioGenerator jsonGenerator = new JsonRelatorioGenerator();
-                conteudoFormatado = jsonGenerator.gerar(relatorio);
-                break;
-            default:
-                throw new IllegalArgumentException("Formato nao suportado para exportacao: " + formato);
+        RelatorioCreator creator = creators.get(formato);
+        if (creator == null) {
+            throw new IllegalArgumentException("Formato nao suportado para exportacao: " + formato);
         }
+        
+        RelatorioGenerator generator = creator.createGenerator();
+        String conteudoFormatado = generator.gerar(relatorio);
 
         String nomeArquivo = relatorio.getTitulo()
                 .replace(" ", "_")
