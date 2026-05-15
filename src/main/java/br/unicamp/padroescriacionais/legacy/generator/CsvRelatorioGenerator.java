@@ -2,8 +2,9 @@ package br.unicamp.padroescriacionais.legacy.generator;
 
 import br.unicamp.padroescriacionais.legacy.domain.Relatorio;
 
-public class CsvRelatorioGenerator {
+public class CsvRelatorioGenerator implements RelatorioGenerator {
 
+    @Override
     public String gerar(Relatorio relatorio) {
         StringBuilder sb = new StringBuilder();
         sb.append("titulo,tipo,dataGeracao,conteudo\n");
@@ -13,7 +14,6 @@ public class CsvRelatorioGenerator {
         sb.append(escapeCsv(relatorio.getConteudo())).append("\n");
         return sb.toString();
     }
-
     private String escapeCsv(String valor) {
         if (valor == null) return "";
         String escapado = valor.replace("\"", "\"\"");
