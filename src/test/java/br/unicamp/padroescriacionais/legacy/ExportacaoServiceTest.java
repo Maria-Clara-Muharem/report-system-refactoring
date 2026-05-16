@@ -92,4 +92,52 @@ class ExportacaoServiceTest {
             );
         }
     }
+
+    @Test
+    void deveExportarRelatorioEmXmlSemErro() {
+        Relatorio relatorio = relatorioService.criarRelatorio(TipoRelatorio.VENDAS);
+        assertDoesNotThrow(() -> exportacaoService.exportar(relatorio, FormatoRelatorio.XML));
+    }
+
+    @Test
+    void deveExportarRelatorioEmHtmlSemErro() {
+        Relatorio relatorio = relatorioService.criarRelatorio(TipoRelatorio.ESTOQUE);
+        assertDoesNotThrow(() -> exportacaoService.exportar(relatorio, FormatoRelatorio.HTML));
+    }
+
+    @Test
+    void exportacaoXmlDeveExibirExtensaoCorreta() {
+        Relatorio relatorio = relatorioService.criarRelatorio(TipoRelatorio.VENDAS);
+        exportacaoService.exportar(relatorio, FormatoRelatorio.XML);
+
+        String saida = saidaCapturada.toString();
+        assertTrue(saida.contains(".xml"), "Saida deve informar o nome do arquivo com extensao .xml");
+    }
+
+    @Test
+    void exportacaoHtmlDeveExibirExtensaoCorreta() {
+        Relatorio relatorio = relatorioService.criarRelatorio(TipoRelatorio.CLIENTES);
+        exportacaoService.exportar(relatorio, FormatoRelatorio.HTML);
+
+        String saida = saidaCapturada.toString();
+        assertTrue(saida.contains(".html"), "Saida deve informar o nome do arquivo com extensao .html");
+    }
+
+    @Test
+    void exportacaoXmlDeveExibirConteudoComEstrutura() {
+        Relatorio relatorio = relatorioService.criarRelatorio(TipoRelatorio.ESTOQUE);
+        exportacaoService.exportar(relatorio, FormatoRelatorio.XML);
+
+        String saida = saidaCapturada.toString();
+        assertTrue(saida.contains("<relatorio>"), "Saida XML deve conter elemento relatorio");
+    }
+
+    @Test
+    void exportacaoHtmlDeveExibirConteudoComEstrutura() {
+        Relatorio relatorio = relatorioService.criarRelatorio(TipoRelatorio.CLIENTES);
+        exportacaoService.exportar(relatorio, FormatoRelatorio.HTML);
+
+        String saida = saidaCapturada.toString();
+        assertTrue(saida.contains("<html>"), "Saida HTML deve conter tag html");
+    }
 }

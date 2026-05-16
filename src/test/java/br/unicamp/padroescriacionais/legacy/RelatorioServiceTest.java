@@ -101,4 +101,50 @@ class RelatorioServiceTest {
         String resultado = service.gerarRelatorio(TipoRelatorio.VENDAS, FormatoRelatorio.PDF);
         assertTrue(resultado.contains("Vendas"), "Saida PDF deve mencionar o titulo do relatorio");
     }
+
+    @Test
+    void deveGerarConteudoXmlComEstrutura() {
+        String resultado = service.gerarRelatorio(TipoRelatorio.VENDAS, FormatoRelatorio.XML);
+
+        assertNotNull(resultado);
+        assertFalse(resultado.isBlank());
+        assertTrue(resultado.contains("<?xml"), "Saida XML deve conter declaracao XML");
+        assertTrue(resultado.contains("<relatorio>"), "Saida XML deve conter elemento raiz relatorio");
+        assertTrue(resultado.contains("</relatorio>"), "Saida XML deve fechar elemento raiz");
+    }
+
+    @Test
+    void deveGerarConteudoHtmlComEstrutura() {
+        String resultado = service.gerarRelatorio(TipoRelatorio.ESTOQUE, FormatoRelatorio.HTML);
+
+        assertNotNull(resultado);
+        assertFalse(resultado.isBlank());
+        assertTrue(resultado.contains("<!DOCTYPE html>"), "Saida HTML deve conter DOCTYPE");
+        assertTrue(resultado.contains("<html>"), "Saida HTML deve conter tag html");
+        assertTrue(resultado.contains("</html>"), "Saida HTML deve fechar tag html");
+    }
+
+    @Test
+    void conteudoXmlDeveConterTituloDoRelatorio() {
+        String resultado = service.gerarRelatorio(TipoRelatorio.CLIENTES, FormatoRelatorio.XML);
+        assertTrue(resultado.contains("Clientes"), "Saida XML deve mencionar o titulo do relatorio");
+    }
+
+    @Test
+    void conteudoHtmlDeveConterTituloDoRelatorio() {
+        String resultado = service.gerarRelatorio(TipoRelatorio.CLIENTES, FormatoRelatorio.HTML);
+        assertTrue(resultado.contains("Clientes"), "Saida HTML deve mencionar o titulo do relatorio");
+    }
+
+    @Test
+    void xmlDeveConterTipoDoRelatorio() {
+        String resultado = service.gerarRelatorio(TipoRelatorio.ESTOQUE, FormatoRelatorio.XML);
+        assertTrue(resultado.contains("ESTOQUE"), "Saida XML deve conter o tipo do relatorio");
+    }
+
+    @Test
+    void htmlDeveConterTipoDoRelatorio() {
+        String resultado = service.gerarRelatorio(TipoRelatorio.VENDAS, FormatoRelatorio.HTML);
+        assertTrue(resultado.contains("VENDAS"), "Saida HTML deve conter o tipo do relatorio");
+    }
 }
